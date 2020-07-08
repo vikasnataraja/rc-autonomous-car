@@ -14,3 +14,5 @@ Connor Brooks
 Jack Hessburg
 Alecio Madrid
 Vikas Nataraja
+
+Special thanks to Chris Heckman and Kyle Harlow for their help and advice over the course of the project.
