@@ -1,0 +1,8 @@
+<launch>
+        <node pkg="depth" type="depth" name="depth" output="screen">
+                <param name="resolution" value="0.1"/>
+		<param name="FLAG_DEPTH" value="1"/>
+                <param name="FLAG_COLOR" value="1"/>
+                <param name="FLAG_INFRARED" value="1"/>
+        </node>
+</launch>

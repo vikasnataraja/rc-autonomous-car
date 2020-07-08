@@ -1,0 +1,28 @@
+#Pololu based motors
+
+drive_motor:
+  pololu_id: 12
+  motor_id: 1
+  init: 1500
+  min: 820
+  max: 2175
+  reverse: false
+  calibration:
+    min_pulse: 820
+    min_angle: 0
+    max_pulse: 2175
+    max_angle: 115
+
+steering_servo:
+    pololu_id: 12
+    motor_id: 3
+    init: 1500
+    min: 1150
+    max: 1850
+    reverse: false
+    calibration:
+      min_pulse: 1150
+      min_angle: 0
+      max_pulse: 1850 
+      max_angle: 90
+

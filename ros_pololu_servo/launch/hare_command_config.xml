@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="ros_pololu_servo" type="HARE_command.py" name="HARE_command" />
+</launch>

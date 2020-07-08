@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+    <!-- Init Config -->
+    <group>
+        <!-- Start Control -->    
+        <include file="$(find ros_pololu_servo)/launch/HARE_control.launch" />
+        <!-- Start Camera -->
+        <include file="$(find rs_custom_wrapper)/launch/hare_rs_config.xml" />
+		   
+    </group>
+
+    <!-- Start rosflight for rc comms -->
+    <node pkg="rosflight" name="rosflight" type="rosflight_io" output="screen" />
+
+
+    <!-- Start Filter -->
+    <rosparam command="load" file="$(find plan_ctrl)/config.yaml" />
+    <node name="cam_arr_filter" pkg="plan_ctrl" type="rs_array_filter" output="screen" />
+
+    
+    <!-- Planner Params -->
+    <param name="LINEAR_SPEED" type="double" value="0.5"/>
+    
+    <param name="ANGLE_DIFF_MIN" type="double" value="0.196"/> <!-- pi/16 = 0.196 -->
+    
+    <!-- param name="P_VALUE" type="double" value="1.0000"/ --> <!-- 'wall_follow_state' controls on "meters" -->
+    <param name="P_VALUE" type="double" value="0.030"/> <!-- 'hallway_FSM' controls on "indices" -->
+    <param name="I_VALUE" type="double" value="0.00018"/>
+    <param name="D_VALUE" type="double" value="0.054"/> 
+
+    <!-- This should range from 0 - 1 -->
+    <param name="RC_THROTTLE_SCALE" type="double" value="0.5"/> 
+
+    <!-- Start Planner -->
+    <node name="CarFSM" pkg="plan_ctrl" type="simple_PID_on_wall.py" output="screen" />
+    <!-- Start Recording , URL: https://answers.ros.org/question/52773/record-with-rosbag-from-launch-file/?answer=52856#post-id-52856 -->
+    <!-- node pkg="rosbag" type="record" name="rosbag_record_hall"
+          args="record -o /rosout /HARE_high_level_command /filtered_distance /pololu/command /pololu/motor_states"/ --> 
+
+    <!-- Start Sign Detection --> 
+    <!-- <include file="$(find image_proc)/launch/stopsign.launch" /> -->
+    
+</launch>

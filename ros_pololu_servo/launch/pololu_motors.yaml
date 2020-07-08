@@ -1,0 +1,16 @@
+#Pololu based motors
+
+drive_motor:
+  pololu_id: 1
+  motor_id: 3
+  init: 1000
+  min: 1000
+  max: 2000
+  reverse: false
+  calibration:
+    min_pulse: 1000
+    min_angle: 0
+    max_pulse: 2000
+    max_angle: 1
+
+

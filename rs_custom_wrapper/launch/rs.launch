@@ -1,0 +1,42 @@
+<launch>
+        <node pkg="rs_custom_wrapper" type="rs_custom_wrapper" name="rs_custom_wrapper" output="screen">
+                <!-- DISPLAY THE CV IM SHOW VISUALIZER -->
+		<param name="CV_IMSHOW_VISUALIZER_FLAG" type="boolean" value="0"/>
+
+		<!-- OPERATE THE INFRARED LASER (NECESSARY TO GET DEPTH IMAGE) -->
+		<param name="LASER_FLAG" type="boolean" value="1"/>
+
+		<!-- COMPUTE & PUBLISH DEPTH IMAGE -->
+		<param name="DEPTH_FLAG" type="boolean" value="1"/>
+
+                <!-- PUBLISH IMU DATA -->
+                <param name="IMU_FLAG" type="boolean" value="1"/>
+
+		<!-- DEPTH IMAGE PARAMETERS -->
+                <param name="DEPTH_WIDTH" type="int" value="640"/>
+                <param name="DEPTH_HEIGHT" type="int" value="360"/>
+                <param name="DEPTH_FPS" type="int" value="60"/>
+
+                <!-- COMPUTE & PUBLISH RGB DEPTH IMAGE -->
+                <param name="DEPTH_RGB_FLAG" type="boolean" value="0"/>
+
+                <!-- COMPUTE & PRINT DEPTH METERS MATRIX -->
+                <param name="DEPTH_METERS_FLAG" type="boolean" value="1"/>
+
+                <!-- COMPUTE & PUBLISH MONOCHROME INFRARED IMAGE -->
+                <param name="INFRARED_FLAG" type="boolean" value="0"/>
+
+		<!-- INFRARED IMAGE PARAMETERS -->
+                <param name="INFRARED_WIDTH" type="int" value="640"/>
+                <param name="INFRARED_HEIGHT" type="int" value="360"/>
+                <param name="INFRARED_FPS" type="int" value="60"/>
+
+                <!-- COMPUTE & PUBLISH COLOR IMAGE (NOT USED RIGHT NOW) -->
+                <param name="COLOR_FLAG" type="boolean" value="0"/>
+
+                <!-- COLOR IMAGE PARAMETERS (NOT USED RIGHT NOW) -->
+                <param name="COLOR_WIDTH" type="int" value="640"/>
+                <param name="COLOR_HEIGHT" type="int" value="360"/>
+                <param name="COLOR_FPS" type="int" value="60"/>
+        </node>
+</launch>

@@ -1,0 +1,89 @@
+<launch>
+	<!-- launch parameters group! -->
+	<arg name = "SIM_or_Real" default="Real" />  <!-- default (value) should be SIM or Real -->
+	<arg name = "Left_or_Right" default="lefts" />  <!-- default (value) should be lefts or rights -->
+	<arg name = "Track_Name" default="circle" />
+	
+	<param name="Kill_switch_val" type="bool" value="False"/>
+	<param name="Manual_mode_val" type="bool" value="False"/> <!-- if not in manual mode, then TBD is in autonomous mode -->
+	
+	<!-- auto write SIM v Real parameters based on argument above since not sure arguments can be read in to python and params can't be eval'd in a launch file -->
+	<group if="$(eval arg('SIM_or_Real')=='SIM')">
+		<param name="SIM" type="bool" value="True"/>
+	</group>
+	<group if="$(eval arg('SIM_or_Real')=='Real')">
+		<param name="SIM" type="bool" value="False"/>
+	</group>
+	
+	
+	<!-- control methods -->
+	<group> 
+		<node respawn="true" pkg="tbd_main" type="tbd_drive_at_deepest_cntrl.py" name="tbd_drive_at_deepest" output="screen"> </node> 
+	</group>
+	
+	<!-- joy stick and listener group -->
+	<group> 
+		<!-- joy node -->
+		<node respawn="true" pkg="joy" type="joy_node" name="tbd_joystick" >
+			<param name="dev" type="string" value="/dev/input/js0" /> <!-- js0 is a parameter that could change -->
+			<param name="deadzone" value="0.12" />
+		</node>
+	  
+		<!-- joy listener node -->
+		<!--<node respawn="true" pkg="tbd_joystick_demo" type="tbd_joystick_listener.py" name="tbd_joystick_listener" output="screen"> </node> -->
+	</group>
+	<!-- END OF joy stick and listener group -->
+  
+	<!-- sensors and acuators group -->
+	<group if="$(eval arg('SIM_or_Real')=='Real')">
+	  
+		<!-- start motor and steering control via pololu -->
+		<include file = "$(find ros_pololu_servo)/launch/TBD_pololu_ctrl.launch"/>
+
+		<!-- start lidar -->
+		<include file = "$(find rplidar_ros)/launch/rplidar_a3.launch"/>
+
+	</group>
+	<!-- END OF sensors and acuators group -->
+	
+	<!-- Simulation group -->
+	<group if="$(eval arg('SIM_or_Real')=='SIM')">
+		<!-- start simulation -->
+		<group if="$(eval arg('Track_Name')=='eccr')">
+			<group if="$(eval arg('Left_or_Right')=='rights')">
+				<include file="$(find tbd_gazebo)/launch/tbd_sim.launch">
+					<arg name="world_name" value="track_eccr-rights" />
+				</include>
+			</group>
+			<group if="$(eval arg('Left_or_Right')=='lefts')">
+				<include file="$(find tbd_gazebo)/launch/tbd_sim.launch">
+					<arg name="world_name" value="track_eccr-lefts" />
+				</include>
+			</group>
+		</group>
+		<group if="$(eval arg('Track_Name')=='mini')">
+			<include file="$(find tbd_gazebo)/launch/tbd_sim.launch">
+				<arg name="world_name" value="track_mini" />
+			</include>
+		</group>
+		<group if="$(eval arg('Track_Name')=='noisy')">
+			<include file="$(find tbd_gazebo)/launch/tbd_sim.launch">
+				<arg name="world_name" value="track_eccr_noisy" />
+			</include>
+		</group>
+		<group if="$(eval arg('Track_Name')=='wack')">
+			<include file="$(find tbd_gazebo)/launch/tbd_sim.launch">
+				<arg name="world_name" value="track_wack" />
+			</include>
+		</group>
+		<group if="$(eval arg('Track_Name')=='circle')">
+			<include file="$(find tbd_gazebo)/launch/tbd_sim.launch">
+				<arg name="world_name" value="track_smooth_circle" />
+			</include>
+		</group>
+		<node pkg="race" name="sim_connector_node" type="sim_connector.py" />
+	</group>
+	<!-- END OF Simulation group -->
+	
+  
+</launch>
